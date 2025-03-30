@@ -5,10 +5,15 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include "Minigin.h"
+
+#include <chrono>
+#include <thread>
+
 #include "InputManager.h"
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
+#include "EngineTime.h"
 
 SDL_Window* g_window{};
 
@@ -40,11 +45,11 @@ void PrintSDLVersion()
 		version.major, version.minor, version.patch);
 }
 
-dae::Minigin::Minigin(const std::filesystem::path& dataPath)
+dae::Minigin::Minigin(const std::string& dataPath)
 {
 	PrintSDLVersion();
-	
-	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
+
+	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
 	}
@@ -53,16 +58,17 @@ dae::Minigin::Minigin(const std::filesystem::path& dataPath)
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		640,
-		480,
+		640, // original 640
+		480, // original 480
 		SDL_WINDOW_OPENGL
 	);
-	if (g_window == nullptr) 
+	if (g_window == nullptr)
 	{
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
 
 	Renderer::GetInstance().Init(g_window);
+
 	ResourceManager::GetInstance().Init(dataPath);
 }
 
@@ -81,13 +87,50 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
+	auto& time = EngineTime::GetInstance();
 
-	// todo: this update loop could use some work.
 	bool doContinue = true;
+	auto lastTime = std::chrono::high_resolution_clock::now();
+	float lag = 0.0f;
+
+
 	while (doContinue)
 	{
+		// update delta time using the time singleton
+		time.UpdateDeltaTime();
+		const float deltaTime = time.GetDeltaTime();
+		lag += deltaTime;
+
 		doContinue = input.ProcessInput();
+
+		float fixedTimeStep = EngineTime::FIXED_TIME_STEP;
+
+		// fixed update logic
+		while (lag >= fixedTimeStep)
+		{
+			FixedUpdate(fixedTimeStep);
+			lag -= fixedTimeStep;
+		}
+
+		// update game logic
 		sceneManager.Update();
 		renderer.Render();
+
+		// calculate sleep time
+		auto currentTime = std::chrono::high_resolution_clock::now();
+		auto frameDuration = std::chrono::milliseconds(16); // 60 FPS cap (16.67 ms)
+		auto sleepTime = frameDuration - std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime);
+
+		// sleep for the remaining time
+		if (sleepTime > std::chrono::milliseconds(0))
+		{
+			std::this_thread::sleep_for(sleepTime);
+		}
+
+		lastTime = std::chrono::high_resolution_clock::now();
 	}
+}
+
+void dae::Minigin::FixedUpdate(float)
+{
 }

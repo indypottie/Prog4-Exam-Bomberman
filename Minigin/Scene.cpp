@@ -7,7 +7,9 @@ using namespace dae;
 
 unsigned int Scene::m_idCounter = 0;
 
-Scene::Scene(const std::string& name) : m_name(name) {}
+Scene::Scene(std::string name) : m_name(std::move(name))
+{
+}
 
 Scene::~Scene() = default;
 
@@ -18,7 +20,7 @@ void Scene::Add(std::shared_ptr<GameObject> object)
 
 void Scene::Remove(std::shared_ptr<GameObject> object)
 {
-	m_objects.erase(std::remove(m_objects.begin(), m_objects.end(), object), m_objects.end());
+	std::erase(m_objects, object);
 }
 
 void Scene::RemoveAll()
@@ -32,6 +34,13 @@ void Scene::Update()
 	{
 		object->Update();
 	}
+
+	m_objects.erase(std::ranges::remove_if(m_objects, [](const std::shared_ptr<GameObject>& obj)
+	{
+		return obj->IsMarkedForDeletion();
+	}).begin(),
+
+	m_objects.end());
 }
 
 void Scene::Render() const
