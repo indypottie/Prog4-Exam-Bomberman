@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 #include "Minigin.h"
 
 #include <chrono>
@@ -14,6 +15,7 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include "EngineTime.h"
+#include "ServiceLocator.h"
 
 SDL_Window* g_window{};
 
@@ -43,6 +45,14 @@ void PrintSDLVersion()
 	version = *TTF_Linked_Version();
 	printf("We are linking against SDL_ttf version %u.%u.%u.\n",
 		version.major, version.minor, version.patch);
+
+	SDL_MIXER_VERSION(&version);
+	printf("We compiled against SDL_mixer version %u.%u.%u ...\n",
+		version.major, version.minor, version.patch);
+
+	version = *Mix_Linked_Version();
+	printf("We are linking against SDL_mixer version %u.%u.%u.\n",
+		version.major, version.minor, version.patch);
 }
 
 dae::Minigin::Minigin(const std::string& dataPath)
@@ -67,9 +77,13 @@ dae::Minigin::Minigin(const std::string& dataPath)
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
 
+	ServiceLocator::GetInstance();
+	ServiceLocator::RegisterSoundSystem(std::make_unique<SoundSystem>());
+
 	Renderer::GetInstance().Init(g_window);
 
 	ResourceManager::GetInstance().Init(dataPath);
+
 }
 
 dae::Minigin::~Minigin()

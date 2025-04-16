@@ -15,3 +15,16 @@ public:
 
 	void Execute() override;
 };
+
+
+// temp command to play sound for testing the sound system
+class PlaySoundCommand final : public Command
+{
+public:
+	explicit PlaySoundCommand(std::string soundFile) : m_SoundFile(std::move(soundFile)) {}
+
+	void Execute() override;
+
+private:
+	std::string m_SoundFile;
+};

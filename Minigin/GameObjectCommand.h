@@ -8,7 +8,7 @@
 
 
 //-----------------------------------------------------
-// GameActorCommand Class									 
+// GameActorCommand Class -> this command has an extra data member that is a game object 							 
 //-----------------------------------------------------
 class GameObjectCommand : public Command
 {

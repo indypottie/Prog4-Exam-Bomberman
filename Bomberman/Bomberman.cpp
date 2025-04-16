@@ -65,6 +65,7 @@ void load()
 	input.BindControllerCommand(0, ControllerButton::DPAD_DOWN,  keyState::down, std::make_unique<MoveCommand>(*bombermanObject, Direction::Down));
 
 	input.BindControllerCommand(0, ControllerButton::BUTTON_X, keyState::released, std::make_unique<TakeDamage>(*bombermanObject));
+	input.BindControllerCommand(0, ControllerButton::BUTTON_A, keyState::released, std::make_unique<PlaySoundCommand>("Resources/Bomberman_SFX_06.wav"));
 
 
 	/// controls
@@ -72,6 +73,7 @@ void load()
 	bomberManControlsObject->SetPosition(10, 140.f);
 	bomberManControlsObject->AddComponent<TextComponent>("Use the D-Pad to move BomberMan, X to inflict damage", smallerFont);
 	scene.Add(bomberManControlsObject);
+
 }
 
 int main(int, char*[])

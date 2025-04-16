@@ -45,6 +45,6 @@ void HealthComponent::TakeDamage(int amount)
 		m_CurrentHealth -= amount;
 	}
 
-	Event damageEvent(EventId::DAMAGE_TAKEN);
+	Event damageEvent(make_sdbm_hash("DamageTaken"), amount);
 	m_SubjectPtr->NotifyObservers(damageEvent, GetOwner());
 }

@@ -3,6 +3,7 @@
 //---------------------------
 #include "DisplayHealthComponent.h"
 
+#include <iostream>
 #include <string>
 
 #include "GameObject.h"
@@ -23,12 +24,14 @@ DisplayHealthComponent::DisplayHealthComponent(dae::GameObject& owner, TextCompo
 
 void DisplayHealthComponent::Notify(const Event& event, dae::GameObject* actor)
 {
-	if (event.id == EventId::DAMAGE_TAKEN)
+	if (event.id == make_sdbm_hash("DamageTaken"))
 	{
 		auto currentHealth = actor->GetComponent<HealthComponent>()->GetCurrentHealth();
 
 		std::string updatedText = ("Health: " + std::to_string(currentHealth));
 
 		m_TextComponentPtr->SetText(updatedText);
+
+		std::cout << "Damage Taken: " << event.args[0].Get<int>() << '\n';
 	}
 }
