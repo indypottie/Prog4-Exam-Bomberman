@@ -23,8 +23,6 @@ public:
 			std::cerr << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << '\n';
 		}
 
-		Mix_Volume(-1, MIX_MAX_VOLUME);
-
 		std::cout << "[SoundSystemImpl] Constructor starting\n";
 		m_Worker = std::jthread([this](std::stop_token stopToken) {
 			std::cout << "[SoundSystem Thread] Launched\n";
@@ -78,8 +76,7 @@ private:
 				m_SoundQueue.pop();
 				lock.unlock();
 
-				std::cout << "Playing sound: " << soundFile << '\n';
-				PlaySound(soundFile); // clean and contained
+				PlaySound(soundFile);
 
 				lock.lock();
 			}
@@ -122,7 +119,7 @@ private:
 
 	std::queue<std::string> m_SoundQueue;
 	std::mutex m_Mutex;
-	std::condition_variable_any m_Condition; // Needed for jthread with stop_token
+	std::condition_variable_any m_Condition;
 	std::jthread m_Worker;
 
 	std::unordered_map<std::string, Mix_Chunk*> m_SoundCache;

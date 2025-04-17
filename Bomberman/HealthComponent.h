@@ -38,6 +38,8 @@ public:
 
 	int GetCurrentHealth() const { return m_CurrentHealth; }
 
+	const std::string DAMAGE_SOUND{ "Resources/Audio/Bomberman_SFX_03.wav" };
+
 private:
 	//-------------------------------------------------
 	// Private member functions								

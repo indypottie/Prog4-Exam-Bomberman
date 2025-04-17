@@ -21,22 +21,14 @@ public:
 	// Member functions						
 	//-------------------------------------------------
 
-	static void RegisterSoundSystem(std::unique_ptr<SoundSystem> soundSystem)
-	{
-		if (soundSystem)
-		{
-			std::cout << "[ServiceLocator] Sound system registered.\n";
-			GetInstance().m_SoundSystem = std::move(soundSystem);
-		}
-	}
+	void Init();
 
-	static SoundSystem& GetSoundSystem()
-	{
-		return *GetInstance().m_SoundSystem;
-	}
+	static SoundSystem& GetSoundSystem();
 
 private:
 	friend class dae::Singleton<ServiceLocator>;
+
+	static void RegisterSoundSystem(std::unique_ptr<SoundSystem> soundSystem);
 
 	//-------------------------------------------------
 	// Datamembers								

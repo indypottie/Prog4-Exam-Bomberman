@@ -4,6 +4,7 @@
 #include "HealthComponent.h"
 
 #include "Event.h"
+#include "ServiceLocator.h"
 #include "Subject.h"
 
 //---------------------------
@@ -47,4 +48,6 @@ void HealthComponent::TakeDamage(int amount)
 
 	Event damageEvent(make_sdbm_hash("DamageTaken"), amount);
 	m_SubjectPtr->NotifyObservers(damageEvent, GetOwner());
+
+	ServiceLocator::GetSoundSystem().QueueSound(DAMAGE_SOUND);
 }

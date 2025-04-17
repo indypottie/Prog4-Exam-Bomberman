@@ -68,8 +68,8 @@ dae::Minigin::Minigin(const std::string& dataPath)
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		640, // original 640
-		480, // original 480
+		640, // original 640 // bomberman base bg: 528
+		480, // original 480 // bomberman base bg: 256
 		SDL_WINDOW_OPENGL
 	);
 	if (g_window == nullptr)
@@ -77,8 +77,7 @@ dae::Minigin::Minigin(const std::string& dataPath)
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
 
-	ServiceLocator::GetInstance();
-	ServiceLocator::RegisterSoundSystem(std::make_unique<SoundSystem>());
+	ServiceLocator::GetInstance().Init();
 
 	Renderer::GetInstance().Init(g_window);
 
