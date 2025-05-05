@@ -1,5 +1,4 @@
 #include "Scene.h"
-#include "GameObject.h"
 
 #include <algorithm>
 
@@ -13,14 +12,22 @@ Scene::Scene(std::string name) : m_name(std::move(name))
 
 Scene::~Scene() = default;
 
-void Scene::Add(std::shared_ptr<GameObject> object)
+void Scene::Add(std::unique_ptr<GameObject>& object)
 {
 	m_objects.emplace_back(std::move(object));
+	object = nullptr;
 }
 
-void Scene::Remove(std::shared_ptr<GameObject> object)
+void Scene::Remove(GameObject* object)
 {
-	std::erase(m_objects, object);
+	auto it = std::ranges::find_if(m_objects, [object](const std::unique_ptr<GameObject>& ptr) {
+		return ptr.get() == object;
+		});
+
+	if (it != m_objects.end())
+	{
+		m_objects.erase(it);
+	}
 }
 
 void Scene::RemoveAll()
@@ -35,7 +42,7 @@ void Scene::Update()
 		object->Update();
 	}
 
-	m_objects.erase(std::ranges::remove_if(m_objects, [](const std::shared_ptr<GameObject>& obj)
+	m_objects.erase(std::ranges::remove_if(m_objects, [](const std::unique_ptr<GameObject>& obj)
 	{
 		return obj->IsMarkedForDeletion();
 	}).begin(),

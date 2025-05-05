@@ -24,7 +24,7 @@ void load()
 {
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
 
-	auto backGroundObject = std::make_shared<dae::GameObject>();
+	auto backGroundObject = std::make_unique<dae::GameObject>();
 	backGroundObject->AddComponent<TextureComponent>("background.tga");
 	scene.Add(backGroundObject);
 
@@ -34,28 +34,28 @@ void load()
 	//scene.Add(logoObject);
 
 	auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	auto titleObject = std::make_shared<dae::GameObject>();
+	auto titleObject = std::make_unique<dae::GameObject>();
 	titleObject->AddComponent<TextComponent>("Programming 4 engine", font);
 	titleObject->SetPosition(80.f, 20.f);
 	scene.Add(titleObject);
 
 
 
-	auto bombermanObject = std::make_shared<dae::GameObject>();
+	auto bombermanObject = std::make_unique<dae::GameObject>();
 	bombermanObject->SetPosition(250.f, 250.f);
 	bombermanObject->AddComponent<TextureComponent>("bomberman-front.tga");
 	bombermanObject->AddComponent<HealthComponent>();
-	scene.Add(bombermanObject);
 
 	auto smallerFont = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
 
-	auto displayHealthObject = std::make_shared<dae::GameObject>();
+	auto displayHealthObject = std::make_unique<dae::GameObject>();
 	displayHealthObject->SetPosition(10.f, 210.f);
 	displayHealthObject->AddComponent<TextComponent>("Health: 100", smallerFont);
 	displayHealthObject->AddComponent<DisplayHealthComponent>(*displayHealthObject->GetComponent<TextComponent>());
 
 	bombermanObject->GetComponent<HealthComponent>()->AddObserver(displayHealthObject->GetComponent<DisplayHealthComponent>());
 
+	scene.Add(bombermanObject);
 	scene.Add(displayHealthObject);
 
 	auto& input = dae::InputManager::GetInstance();
@@ -69,12 +69,12 @@ void load()
 
 
 	/// controls
-	auto bomberManControlsObject = std::make_shared<dae::GameObject>();
+	auto bomberManControlsObject = std::make_unique<dae::GameObject>();
 	bomberManControlsObject->SetPosition(10, 140.f);
 	bomberManControlsObject->AddComponent<TextComponent>("Use the D-Pad to move BomberMan, X to inflict damage", smallerFont);
 	scene.Add(bomberManControlsObject);
 
-	auto soundControls = std::make_shared<dae::GameObject>();
+	auto soundControls = std::make_unique<dae::GameObject>();
 	soundControls->SetPosition(10, 160.f);
 	soundControls->AddComponent<TextComponent>("Use A to play a sound. (inflicting damage will also play a sound)", smallerFont);
 	scene.Add(soundControls);
