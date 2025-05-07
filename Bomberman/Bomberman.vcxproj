@@ -158,12 +158,16 @@
     <ClCompile Include="Bomberman.cpp" />
     <ClCompile Include="DisplayHealthComponent.cpp" />
     <ClCompile Include="GameCommands.cpp" />
+    <ClCompile Include="GridComponent.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
+    <ClCompile Include="OnealState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DisplayHealthComponent.h" />
     <ClInclude Include="GameCommands.h" />
+    <ClInclude Include="GridComponent.h" />
     <ClInclude Include="HealthComponent.h" />
+    <ClInclude Include="OnealState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

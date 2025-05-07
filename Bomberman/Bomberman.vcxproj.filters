@@ -27,6 +27,12 @@
     <ClCompile Include="DisplayHealthComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OnealState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GridComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HealthComponent.h">
@@ -36,6 +42,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameCommands.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OnealState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GridComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
