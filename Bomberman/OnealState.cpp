@@ -6,10 +6,6 @@
 //---------------------------
 // Constructor & Destructor
 //---------------------------
-OnealState::OnealState()
-{
-	// nothing to create
-}
 
 OnealState::~OnealState()
 {

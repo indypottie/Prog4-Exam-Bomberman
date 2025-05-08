@@ -11,6 +11,7 @@
 #include "EngineCommands.h"
 #include "GameCommands.h"
 #include "GameObject.h"
+#include "GridComponent.h"
 #include "HealthComponent.h"
 #include "InputManager.h"
 #include "Minigin.h"
@@ -25,7 +26,7 @@ void load()
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
 
 	auto backGroundObject = std::make_unique<dae::GameObject>();
-	backGroundObject->AddComponent<TextureComponent>("background.tga");
+	backGroundObject->AddComponent<TextureComponent>("ScaledPlayfield.tga");
 	scene.Add(backGroundObject);
 
 	//auto logoObject = std::make_shared<dae::GameObject>();
@@ -79,6 +80,28 @@ void load()
 	soundControls->AddComponent<TextComponent>("Use A to play a sound. (inflicting damage will also play a sound)", smallerFont);
 	scene.Add(soundControls);
 
+
+	auto gridObject = std::make_unique<dae::GameObject>();
+	gridObject->SetPosition(0.f, 0.f); // top-left grid origin
+
+	int rows = 13, cols = 31;
+	float cellSize = 32.f;
+
+	auto gridComponent = gridObject->AddComponent<GridComponent>(rows, cols, cellSize);
+
+	// Example setup
+	for (int row = 0; row < rows; ++row)
+	{
+		for (int col = 0; col < cols; ++col)
+		{
+			if (row == 0 || col == 0 || row == rows - 1 || col == cols - 1 || (row % 2 == 0 && col % 2 == 0))
+			{
+				gridComponent->SetTile(row, col, TileType::DestructibleWall);
+			}
+		}
+	}
+
+	scene.Add(gridObject);
 }
 
 int main(int, char*[])

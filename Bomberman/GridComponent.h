@@ -1,69 +1,40 @@
 ﻿#pragma once
-
-
-//-----------------------------------------------------
-// Include Files
-//-----------------------------------------------------
-#include <cstdint>
-#include <vector>
+#include <vec2.hpp>
 
 #include "Component.h"
+#include <vector>
 
-
-// enums
-enum class TileType : uint8_t
+enum class TileType
 {
-	Empty,
-	Wall,
-	Destructible,
-	Bomb,
-	Explosion,
-	Powerup
+    Empty,
+    IndestructibleWall,
+    DestructibleWall,
+    Bomb,
+    Explosion
 };
 
-//-----------------------------------------------------
-// GridComponent Class									 
-//-----------------------------------------------------
-class GridComponent final : public Component
+
+class GridComponent : public Component
 {
 public:
-	GridComponent(dae::GameObject& owner, int width = 10, int height = 10); // Constructor
-	~GridComponent() override = default; // Destructor
+    GridComponent(dae::GameObject& owner, int rows, int cols, float cellSize);
 
-	// -------------------------
-	// Copy/move constructors and assignment operators
-	// -------------------------    
-	GridComponent(const GridComponent& other)					= delete;
-	GridComponent(GridComponent&& other) noexcept				= delete;
-	GridComponent& operator=(const GridComponent& other)		= delete;
-	GridComponent& operator=(GridComponent&& other) noexcept	= delete;
+    void Initialize();
+    void Render() const override;
 
-	//-------------------------------------------------
-	// Member functions						
-	//-------------------------------------------------
+    TileType GetTile(int row, int col) const;
+    void SetTile(int row, int col, TileType type);
 
-	TileType GetTile(int x, int y) const;
-	void SetTile(int x, int y, TileType type);
+    int GetRows() const { return m_Rows; }
+    int GetCols() const { return m_Cols; }
+    float GetCellSize() const { return m_CellSize; }
 
-	bool IsWalkable(int x, int y) const;
-	bool InBounds(int x, int y) const;
-
-	int GetWidth() const { return m_Width; }
-	int GetHeight() const { return m_Height; }
+    glm::vec2 GetWorldPosition(int row, int col) const;
 
 private:
-	//-------------------------------------------------
-	// Private member functions								
-	//-------------------------------------------------
-	int Index(int x, int y) const;
+    int m_Rows, m_Cols;
+    float m_CellSize;
+    std::vector<TileType> m_Grid;
 
-	//-------------------------------------------------
-	// Datamembers								
-	//-------------------------------------------------
-
-
-	int m_Width;
-	int m_Height;
-
-	std::vector<TileType> m_Tiles;
+    void RenderTile(TileType type, float x, float y) const;
 };
