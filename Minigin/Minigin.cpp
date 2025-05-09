@@ -68,8 +68,8 @@ dae::Minigin::Minigin(const std::string& dataPath)
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		640, // original 640 // bomberman base bg: 528
-		480, // original 480 // bomberman base bg: 256
+		992, // original 640 // bomberman base bg: 528
+		416, // original 480 // bomberman base bg: 256
 		SDL_WINDOW_OPENGL
 	);
 	if (g_window == nullptr)

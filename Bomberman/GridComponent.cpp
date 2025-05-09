@@ -3,17 +3,21 @@
 #include "Renderer.h"
 #include <stdexcept>
 
+#include "Texture2D.h"
+
 GridComponent::GridComponent(dae::GameObject& owner, int rows, int cols, float cellSize)
     : Component(owner),
-	m_Rows(rows), m_Cols(cols),
-	m_CellSize(cellSize),
-	m_Grid(rows * cols, TileType::Empty)
+    m_Rows(rows), m_Cols(cols),
+    m_CellSize(cellSize),
+    m_Grid(static_cast<unsigned long long>(rows* cols), TileType::Empty)
 {
+    Initialize();
 }
 
 void GridComponent::Initialize()
 {
     // Could spawn GameObjects for walls if needed
+    m_IndestructibleWallTexturePtr = std::make_unique<dae::Texture2D>("Resources/IndestructibleWall.tga");
 }
 
 TileType GridComponent::GetTile(int row, int col) const
@@ -51,11 +55,11 @@ void GridComponent::Render() const
 
 void GridComponent::RenderTile(TileType type, float x, float y) const
 {
-    // Debug rectangles for now. Replace with proper tile sprites later.
     switch (type)
     {
     case TileType::IndestructibleWall:
-        dae::Renderer::GetInstance().DrawRect(x, y, m_CellSize, m_CellSize, { 50, 50, 50, 255 });
+        dae::Renderer::GetInstance().RenderTexture(*m_IndestructibleWallTexturePtr, x, y);
+        //dae::Renderer::GetInstance().DrawRect(x, y, m_CellSize, m_CellSize, { 50, 50, 50, 255 });
         break;
     case TileType::DestructibleWall:
         dae::Renderer::GetInstance().DrawRect(x, y, m_CellSize, m_CellSize, { 150, 75, 0, 255 });

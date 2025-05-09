@@ -1,8 +1,14 @@
 ﻿#pragma once
+#include <memory>
 #include <vec2.hpp>
 
 #include "Component.h"
 #include <vector>
+
+namespace dae
+{
+	class Texture2D;
+}
 
 enum class TileType
 {
@@ -37,4 +43,6 @@ private:
     std::vector<TileType> m_Grid;
 
     void RenderTile(TileType type, float x, float y) const;
+
+    std::unique_ptr<dae::Texture2D> m_IndestructibleWallTexturePtr;
 };

@@ -26,24 +26,11 @@ void load()
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
 
 	auto backGroundObject = std::make_unique<dae::GameObject>();
-	backGroundObject->AddComponent<TextureComponent>("ScaledPlayfield.tga");
-	scene.Add(backGroundObject);
-
-	//auto logoObject = std::make_shared<dae::GameObject>();
-	//logoObject->AddComponent<TextureComponent>("logo.tga");
-	//logoObject->SetPosition(216.f, 180.f);
-	//scene.Add(logoObject);
-
-	auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	auto titleObject = std::make_unique<dae::GameObject>();
-	titleObject->AddComponent<TextComponent>("Programming 4 engine", font);
-	titleObject->SetPosition(80.f, 20.f);
-	scene.Add(titleObject);
-
+	backGroundObject->AddComponent<TextureComponent>("Bomberman_Playfield.tga");
+	//scene.Add(backGroundObject);
 
 
 	auto bombermanObject = std::make_unique<dae::GameObject>();
-	bombermanObject->SetPosition(250.f, 250.f);
 	bombermanObject->AddComponent<TextureComponent>("bomberman-front.tga");
 	bombermanObject->AddComponent<HealthComponent>();
 
@@ -56,7 +43,7 @@ void load()
 
 	bombermanObject->GetComponent<HealthComponent>()->AddObserver(displayHealthObject->GetComponent<DisplayHealthComponent>());
 
-	scene.Add(bombermanObject);
+
 	scene.Add(displayHealthObject);
 
 	auto& input = dae::InputManager::GetInstance();
@@ -68,17 +55,11 @@ void load()
 	input.BindControllerCommand(0, ControllerButton::BUTTON_X, keyState::released, std::make_unique<TakeDamage>(*bombermanObject));
 	input.BindControllerCommand(0, ControllerButton::BUTTON_A, keyState::released, std::make_unique<PlaySoundCommand>("Resources/Audio/Bomberman_SFX_06.wav"));
 
-
-	/// controls
-	auto bomberManControlsObject = std::make_unique<dae::GameObject>();
-	bomberManControlsObject->SetPosition(10, 140.f);
-	bomberManControlsObject->AddComponent<TextComponent>("Use the D-Pad to move BomberMan, X to inflict damage", smallerFont);
-	scene.Add(bomberManControlsObject);
-
-	auto soundControls = std::make_unique<dae::GameObject>();
-	soundControls->SetPosition(10, 160.f);
-	soundControls->AddComponent<TextComponent>("Use A to play a sound. (inflicting damage will also play a sound)", smallerFont);
-	scene.Add(soundControls);
+	// keyboard
+	input.BindKeyboardCommand(SDLK_w, keyState::down, std::make_unique<MoveCommand>(*bombermanObject, Direction::Up));
+	input.BindKeyboardCommand(SDLK_a, keyState::down, std::make_unique<MoveCommand>(*bombermanObject, Direction::Left));
+	input.BindKeyboardCommand(SDLK_s, keyState::down, std::make_unique<MoveCommand>(*bombermanObject, Direction::Down));
+	input.BindKeyboardCommand(SDLK_d, keyState::down, std::make_unique<MoveCommand>(*bombermanObject, Direction::Right));
 
 
 	auto gridObject = std::make_unique<dae::GameObject>();
@@ -96,11 +77,14 @@ void load()
 		{
 			if (row == 0 || col == 0 || row == rows - 1 || col == cols - 1 || (row % 2 == 0 && col % 2 == 0))
 			{
-				gridComponent->SetTile(row, col, TileType::DestructibleWall);
+				gridComponent->SetTile(row, col, TileType::IndestructibleWall);
 			}
 		}
 	}
 
+	bombermanObject->SetPosition(gridComponent->GetWorldPosition(1, 1).x, gridComponent->GetWorldPosition(1, 1).y);
+
+	scene.Add(bombermanObject);
 	scene.Add(gridObject);
 }
 
