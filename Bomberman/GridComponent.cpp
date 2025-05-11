@@ -16,8 +16,10 @@ GridComponent::GridComponent(dae::GameObject& owner, int rows, int cols, float c
 
 void GridComponent::Initialize()
 {
-    // Could spawn GameObjects for walls if needed
+    // load textures
     m_IndestructibleWallTexturePtr = std::make_unique<dae::Texture2D>("Resources/IndestructibleWall.tga");
+	m_DestructibleWallTexturePtr = std::make_unique<dae::Texture2D>("Resources/DestructibleWall.tga");
+	m_FloorTexturePtr = std::make_unique<dae::Texture2D>("Resources/Floor.tga");
 }
 
 TileType GridComponent::GetTile(int row, int col) const
@@ -57,19 +59,29 @@ void GridComponent::RenderTile(TileType type, float x, float y) const
 {
     switch (type)
     {
+    case TileType::Floor:
+        dae::Renderer::GetInstance().RenderTexture(*m_FloorTexturePtr, x, y);
+        //dae::Renderer::GetInstance().DrawRect(x, y, m_CellSize, m_CellSize, { 0, 255, 0, 255 });
+        break;
+
     case TileType::IndestructibleWall:
         dae::Renderer::GetInstance().RenderTexture(*m_IndestructibleWallTexturePtr, x, y);
         //dae::Renderer::GetInstance().DrawRect(x, y, m_CellSize, m_CellSize, { 50, 50, 50, 255 });
         break;
+
     case TileType::DestructibleWall:
-        dae::Renderer::GetInstance().DrawRect(x, y, m_CellSize, m_CellSize, { 150, 75, 0, 255 });
+        dae::Renderer::GetInstance().RenderTexture(*m_DestructibleWallTexturePtr, x, y);
+       // dae::Renderer::GetInstance().DrawRect(x, y, m_CellSize, m_CellSize, { 150, 75, 0, 255 });
         break;
+
     case TileType::Bomb:
         dae::Renderer::GetInstance().DrawRect(x, y, m_CellSize, m_CellSize, { 0, 0, 0, 255 });
         break;
+
     case TileType::Explosion:
         dae::Renderer::GetInstance().DrawRect(x, y, m_CellSize, m_CellSize, { 255, 0, 0, 255 });
         break;
+
 
     case TileType::Empty:
         break;

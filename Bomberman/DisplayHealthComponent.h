@@ -6,7 +6,7 @@
 #include "Component.h"
 #include "Observer.h"
 
-class TextComponent;
+#include "TextComponent.h"
 
 //-----------------------------------------------------
 // DisplayHealthComponent Class									 

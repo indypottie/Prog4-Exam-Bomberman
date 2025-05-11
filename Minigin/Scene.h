@@ -17,6 +17,8 @@ namespace dae
 		void Update();
 		void Render() const;
 
+		GameObject* FindObjectByTag(const std::string& tag);
+
 		~Scene();
 		Scene(const Scene& other) = delete;
 		Scene(Scene&& other) = delete;

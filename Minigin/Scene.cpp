@@ -58,3 +58,13 @@ void Scene::Render() const
 	}
 }
 
+GameObject* Scene::FindObjectByTag(const std::string& tag)
+{
+	for (const auto& object : m_objects)
+	{
+		if (object->GetTag() == tag)
+			return object.get();
+	}
+	return nullptr;
+}
+

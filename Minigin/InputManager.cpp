@@ -1,8 +1,12 @@
 #include <SDL.h>
 #include "InputManager.h"
 
+#include <array>
+#include <ext/scalar_uint_sized.hpp>
+
 #include "Command.h"
 #include "Controller.h"
+#include "ControllerButtons.h"
 
 bool dae::InputManager::ProcessInput()
 {

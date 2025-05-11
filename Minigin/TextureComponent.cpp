@@ -28,20 +28,31 @@ void TextureComponent::SetTexture(const std::string& fileName)
 	m_Texture = dae::ResourceManager::GetInstance().LoadTexture(fileName);
 }
 
+void TextureComponent::SetSourceRect(const SDL_Rect& srcRect)
+{
+	m_SourceRect = srcRect;
+}
+
+void TextureComponent::ClearSourceRect()
+{
+	m_SourceRect.reset();
+}
+
 void TextureComponent::Render() const
 {
 	auto owner = GetOwner();
 
 	if (owner and m_Texture)
 	{
-		if (auto transform = owner->GetTransformComponent())
+		auto pos = owner->GetPosition();
+
+		if (m_SourceRect.has_value())
 		{
-			const auto& pos = transform->GetWorldPosition();
-			dae::Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
+			dae::Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y, *m_SourceRect);
 		}
 		else
 		{
-			std::cerr << "Error: Owner does not have a TransformComponent!\n";
+			dae::Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
 		}
 	}
 }

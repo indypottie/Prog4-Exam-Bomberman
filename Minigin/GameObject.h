@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <string>
 #include <typeindex>
 #include <unordered_map>
 #include <vec3.hpp>
@@ -30,6 +31,9 @@ namespace dae
 
 		void SetPosition(float x, float y) const;
 		glm::vec3 GetPosition() const;
+
+		void SetTag(const std::string& tag) { m_Tag = tag; }
+		const std::string& GetTag() const { return m_Tag; }
 
 
 		// scene graph methods
@@ -74,6 +78,8 @@ namespace dae
 		// sceneGraph variables
 		GameObject* m_ParentPtr{ nullptr };
 		std::vector<GameObject*> m_ChildrenPtrs;
+
+		std::string m_Tag{};
 	};
 
 

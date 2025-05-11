@@ -7,12 +7,13 @@
 /// ----------------------------------
 /// move command class -> this class will move the game object in a certain direction and will also handle movement speed
 /// ----------------------------------
-enum class Direction
+enum class Direction : uint8_t
 {
     Up,
     Down,
     Left,
-    Right
+    Right,
+    None
 };
 
 class MoveCommand final : public GameObjectCommand

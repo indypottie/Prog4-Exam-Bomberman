@@ -12,11 +12,13 @@ namespace dae
 
 enum class TileType
 {
-    Empty,
+    Floor,
     IndestructibleWall,
     DestructibleWall,
     Bomb,
-    Explosion
+    Explosion,
+
+    Empty
 };
 
 
@@ -38,11 +40,18 @@ public:
     glm::vec2 GetWorldPosition(int row, int col) const;
 
 private:
-    int m_Rows, m_Cols;
-    float m_CellSize;
-    std::vector<TileType> m_Grid;
 
     void RenderTile(TileType type, float x, float y) const;
 
+
+
+    int m_Rows;
+	int m_Cols;
+
+    float m_CellSize;
+    std::vector<TileType> m_Grid;
+
     std::unique_ptr<dae::Texture2D> m_IndestructibleWallTexturePtr;
+	std::unique_ptr<dae::Texture2D> m_DestructibleWallTexturePtr;
+    std::unique_ptr<dae::Texture2D> m_FloorTexturePtr;
 };

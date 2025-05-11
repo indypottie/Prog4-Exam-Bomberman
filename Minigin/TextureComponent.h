@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include <memory>
+#include <optional>
+#include <SDL_rect.h>
 #include <string>
 
 #include "Component.h"
@@ -31,6 +33,10 @@ public:
 	// Member functions						
 	//-------------------------------------------------
 	void SetTexture(const std::string& fileName);
+
+	void SetSourceRect(const SDL_Rect& srcRect); // <-- NEW
+	void ClearSourceRect();                      // <-- Optional: revert to full texture
+
 	void Render() const override;
 
 private:
@@ -39,4 +45,5 @@ private:
 	// Datamembers								
 	//-------------------------------------------------
 	dae::Texture2D* m_Texture{};
+	std::optional<SDL_Rect> m_SourceRect{};
 };

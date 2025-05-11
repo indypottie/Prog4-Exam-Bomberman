@@ -17,9 +17,19 @@ void dae::SceneManager::Render()
 	}
 }
 
+dae::Scene* dae::SceneManager::GetACtiveScene() const
+{
+	return m_ActiveScenePtr.get();
+}
+
 dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
 {
 	const auto& scene = std::shared_ptr<Scene>(new Scene(name));
 	m_scenes.push_back(scene);
+
+	// first scene as active by default
+	if (!m_ActiveScenePtr)
+		m_ActiveScenePtr = scene;
+
 	return *scene;
 }
