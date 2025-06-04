@@ -15,6 +15,7 @@ bool dae::InputManager::ProcessInput()
 		if (e.type == SDL_QUIT) {
 			return false;
 		}
+	}
 
 		// Refresh the keyboard state (process the latest input)
 		SDL_PumpEvents();
@@ -49,7 +50,7 @@ bool dae::InputManager::ProcessInput()
 
 		// Store the current state as the previous state for the next frame
 		memcpy(m_PreviousKeyState, m_CurrentKeyState, SDL_NUM_SCANCODES);
-	}
+	
 
 
 	for (auto& [index, controller] : m_Controllers)
